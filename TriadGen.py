@@ -150,7 +150,7 @@ def TriadaDisminuida(T):
     return np.array(run(1,(T,Tm,Qd),Terceram(T,Tm),Terceram(Tm,Qd)))[0]
 
 def TriadaAumentada(T):
-    return np.array(run(1,(T,TM,Qa),TerceraM(T,TM),TerceraM(TM,Q)))[0]
+    return np.array(run(1,(T,TM,Qa),TerceraM(T,TM),TerceraM(TM,Qa)))[0]
 
 def init(self):
     Notas = ["C","C#","Db","D","D#","Eb","E","F","F#","Gb","G","G#","Ab","A","A#","Bb","B"]
