@@ -116,7 +116,8 @@ Sm = var()
 TM = var()
 Tm = var()
 Q = var()
-
+Qd = var()
+Qa = var()
 
 def TriadaMayor(T):
     return np.array(run(1,(T,TM,Q),TerceraM(T,TM),Terceram(TM,Q)))[0]
@@ -134,12 +135,26 @@ def SetimaMenor(T):
     return np.array(run(1,(T,S),SegundaM(S,T)))[0]
 
 def CuatriadaMayorMaj7(T):
-    return np.array(zip(TriadaMayor(T),SetimaMayor(T))).flatten() 
+    return np.array(np.concatenate((TriadaMayor(T),SetimaMayor(T)[1]), axis = None)).flatten()
 
+def CuatriadaMayor7(T):
+    return np.array(np.concatenate((TriadaMayor(T),SetimaMenor(T)[1]), axis = None)).flatten()
+
+def CuatriadaMenor7(T):
+    return np.array(np.concatenate((TriadaMenor(T),SetimaMenor(T)[1]), axis = None)).flatten()
+
+def CuatriadaMenorMaj7(T):
+    return np.array(np.concatenate((TriadaMenor(T),SetimaMayor(T)[1]), axis = None)).flatten()
+
+def TriadaDisminuida(T):
+    return np.array(run(1,(T,Tm,Qd),Terceram(T,Tm),Terceram(Tm,Qd)))[0]
+
+def TriadaAumentada(T):
+    return np.array(run(1,(T,TM,Qa),TerceraM(T,TM),TerceraM(TM,Q)))[0]
 
 def init(self):
     Notas = ["C","C#","Db","D","D#","Eb","E","F","F#","Gb","G","G#","Ab","A","A#","Bb","B"]
-    Calidad = ["Mayor", "Menor", "Setima", "Setima Mayor"]
+    Calidad = ["Mayor", "Menor", "Setima", "Setima Mayor","Menor Siete", "Menor Setima Mayor", "Aumentada","Disminuida"]
 
     l_notas = Label(self,text = "Nota", fg = "black", bg = "white").place(x = 10, y = 10)
     cbx_notas = ttk.Combobox(self, values = Notas, textvariable = notas).place(x = 10, y = 30)
@@ -157,9 +172,17 @@ def MostrarNotacion():
     elif calidad.get() == "Menor":
         return "m",TriadaMenor(notas.get())
     elif calidad.get() == "Setima":
-        return "7",TriadaMenor(notas.get())
+        return "7",CuatriadaMayor7(notas.get())
     elif calidad.get() == "Setima Mayor":
-        return "maj7",TriadaMenor(notas.get())
+        return "maj7",CuatriadaMayorMaj7(notas.get())
+    elif calidad.get() == "Menor Siete":
+        return "m7",CuatriadaMenor7(notas.get())
+    elif calidad.get() == "Menor Setima Mayor":
+        return "m Maj7", CuatriadaMenorMaj7(notas.get())
+    elif calidad.get() == "Aumentada":
+        return "Aug",TriadaAumentada(notas.get())
+    elif calidad.get() == "Disminuida":
+        return "°", TriadaDisminuida(notas.get())
 
 def Generar():
     AcordeF = ""
